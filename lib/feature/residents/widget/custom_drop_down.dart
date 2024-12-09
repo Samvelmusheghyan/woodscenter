@@ -17,26 +17,31 @@ class CustomDropDownState extends State<CustomDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _link,
-      child: OverlayPortal(
-        controller: _tooltipController,
-        overlayChildBuilder: (BuildContext context) {
-          return CompositedTransformFollower(
-            link: _link,
-            targetAnchor: Alignment.bottomLeft,
-            child: Align(
-              alignment: AlignmentDirectional.topStart,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: MenuWidget(width: _buttonWidth),
+    return TapRegion(
+      onTapOutside: (tap) {
+        _tooltipController.hide();
+      },
+      child: CompositedTransformTarget(
+        link: _link,
+        child: OverlayPortal(
+          controller: _tooltipController,
+          overlayChildBuilder: (BuildContext context) {
+            return CompositedTransformFollower(
+              link: _link,
+              targetAnchor: Alignment.bottomLeft,
+              child: Align(
+                alignment: AlignmentDirectional.topStart,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: MenuWidget(width: _buttonWidth),
+                ),
               ),
-            ),
-          );
-        },
-        child: ButtonWidget(
-          onTap: onTap,
-          child: const Text('Custom Drop Down'),
+            );
+          },
+          child: ButtonWidget(
+            onTap: onTap,
+            child: const Text('Custom Drop Down'),
+          ),
         ),
       ),
     );
