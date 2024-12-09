@@ -1,5 +1,7 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:woodscenter/core/common/utils/extensions/color_ext.dart';
 import 'package:woodscenter/main/top_level_destinations.dart';
@@ -33,6 +35,9 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: SvgPicture.network("https://woodscenter.am/assets/images/logo.svg"),
+        ),
         body: widget.navigationShell,
         bottomNavigationBar: NavigationBar(
           destinations: [
