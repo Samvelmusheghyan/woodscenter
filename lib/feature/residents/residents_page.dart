@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:woodscenter/feature/residents/bloc/residents_page_bloc.dart';
-import 'package:woodscenter/feature/residents/widget/custom_drop_down.dart';
+import 'package:woodscenter/feature/residents/widget/woods_drop_down.dart';
 import 'package:woodscenter/main.dart';
 
 import '../../core/sources/woodscenter/response/resident_dto.dart';
@@ -21,14 +21,12 @@ class ResidentsPage extends HookWidget {
         child: Scaffold(
           body: Column(
             children: [
-              const CustomDropDown(),
               const Padding(
                 padding: EdgeInsets.only(top: 16),
                 child: ResidentTypeDropdownMenu(),
               ),
-              const SizedBox(height: 12),
               BlocSelector<ResidentsPageBloc, ResidentsPageState, List<ResidentItemDto>>(
-                selector: (state) => state.residents,
+                selector: (state) => state.filteredResidents,
                 builder: (context, residents) {
                   return Expanded(child: ResidentItemList(residents: residents));
                 },
@@ -48,38 +46,12 @@ class ResidentTypeDropdownMenu extends HookWidget {
   Widget build(BuildContext context) {
     const residentTypes = ResidentType.values;
 
-    final selectedVale = useState(residentTypes.first);
-
-    return DropdownButtonFormField<ResidentType>(
-      value: selectedVale.value,
-      decoration: InputDecoration(
-        filled: true,
-        disabledBorder: const UnderlineInputBorder(borderSide: BorderSide.none),
-        contentPadding: const EdgeInsets.all(16.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      onChanged: (ResidentType? residentType) {
-        if (residentType == null) return;
-        selectedVale.value = residentType;
+    return WoodsDropDown(
+      items: residentTypes.map((residentType) => WoodsDropDownEntry<ResidentType>(title: residentType.name.tr(), value: residentType)).toList(),
+      initialSelected: ResidentType.all,
+      onSelectedItemChanged: (selected) {
+        context.read<ResidentsPageBloc>().add(ResidentsPageEvent.filterResidents(type: selected));
       },
-      items: residentTypes.map(
-        (ResidentType type) {
-          return DropdownMenuItem<ResidentType>(
-            value: type,
-             child: Text(type.name.tr()),
-          );
-        },
-      ).toList(),
     );
   }
 }
@@ -92,6 +64,7 @@ class ResidentItemList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.only(top: 12),
       physics: const BouncingScrollPhysics(),
       itemCount: residents.length,
       itemBuilder: (context, index) {
@@ -116,6 +89,9 @@ class ResidentItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.black.withOpacity(0.3),
+      elevation: 3,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -132,7 +108,9 @@ class ResidentItem extends HookWidget {
                 width: double.infinity,
                 fit: BoxFit.cover,
                 imageUrl: logo,
-                placeholder: (context, url) => const Column(children: [CircularProgressIndicator()],),
+                placeholder: (context, url) => const Column(
+                  children: [CircularProgressIndicator()],
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),

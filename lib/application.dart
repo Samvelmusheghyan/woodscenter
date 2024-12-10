@@ -7,6 +7,7 @@ import 'package:woodscenter/feature/contacts/navigation/contact_graph.dart';
 import 'package:woodscenter/feature/home/navigation/home_graph.dart';
 import 'package:woodscenter/feature/residents/navigation/residents_graph.dart';
 import 'package:woodscenter/main/navigation/main_graph.dart';
+import 'package:woodscenter/res/colors.dart';
 
 import 'feature/authentication/navigation/authentication_graph.dart';
 import 'launch/navigation/launch_graph.dart';
@@ -38,7 +39,7 @@ class WoodsCenterApp extends HookWidget {
       /// App settings
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: WoodsColors.backgroundColor),
         useMaterial3: true,
       ),
     );

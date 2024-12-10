@@ -90,6 +90,7 @@ class ResidentsSocialLinksDto {
 }
 
 enum ResidentType {
+  all,
   @JsonValue("technology")
   technology,
   @JsonValue("education")

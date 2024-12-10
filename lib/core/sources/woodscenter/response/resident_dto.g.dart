@@ -61,6 +61,7 @@ Map<String, dynamic> _$ResidentItemDtoToJson(ResidentItemDto instance) =>
     };
 
 const _$ResidentTypeEnumMap = {
+  ResidentType.all: 'all',
   ResidentType.technology: 'technology',
   ResidentType.education: 'education',
   ResidentType.food: 'food',
